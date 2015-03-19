@@ -14,26 +14,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.tylos.daggermimo.BuildConfig;
 import com.example.tylos.daggermimo.R;
 import com.example.tylos.daggermimo.base.utils.ImageBuilder;
 import com.example.tylos.daggermimo.base.view.BaseActivity;
 import com.example.tylos.daggermimo.common.transformations.GradientTransformation;
+import com.example.tylos.daggermimo.login.api.PublicApi;
 import com.example.tylos.daggermimo.movie.MovieDetailActivity;
 import com.squareup.picasso.Picasso;
-import com.uwetrottmann.tmdb.TmdbHelper;
 import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.MovieResultsPage;
-import com.uwetrottmann.tmdb.services.MoviesService;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
 
 public class MoviesListActivity extends BaseActivity {
 
@@ -165,21 +159,8 @@ public class MoviesListActivity extends BaseActivity {
         new AsyncTask<Void, Void, MovieResultsPage>() {
             @Override
             protected MovieResultsPage doInBackground(Void... params) {
-                MoviesService service = new RestAdapter.Builder()
-                        .setEndpoint(BuildConfig.TMDB_ROOT)
-                        .setRequestInterceptor(new RequestInterceptor() {
-                            @Override
-                            public void intercept(RequestFacade request) {
-                                request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                            }
-                        })
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
-                        .build()
-                        .create(MoviesService.class);
-
-
-                return service.upcoming(1, "es");
+                PublicApi api = new PublicApi();
+                return api.getUpcomingMovies();
             }
 
             @Override

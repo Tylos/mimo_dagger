@@ -6,10 +6,14 @@ import com.example.tylos.daggermimo.login.api.model.RequestToken;
 import com.example.tylos.daggermimo.login.api.model.SessionData;
 import com.example.tylos.daggermimo.login.api.model.SessionToken;
 import com.example.tylos.daggermimo.login.api.services.AuthenticationService;
+import com.uwetrottmann.tmdb.TmdbHelper;
+import com.uwetrottmann.tmdb.entities.MovieResultsPage;
+import com.uwetrottmann.tmdb.services.MoviesService;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.converter.GsonConverter;
 
 /**
  * Created by tylos on 19/3/15.
@@ -63,6 +67,24 @@ public class PublicApi {
             }
         }
         return account;
+    }
+
+    public MovieResultsPage getUpcomingMovies() {
+        MoviesService service = new RestAdapter.Builder()
+                .setEndpoint(BuildConfig.TMDB_ROOT)
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade request) {
+                        request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
+                    }
+                })
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
+                .build()
+                .create(MoviesService.class);
+
+
+        return service.upcoming(1, "es");
     }
 
 }
