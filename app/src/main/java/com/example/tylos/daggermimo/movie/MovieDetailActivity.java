@@ -126,7 +126,7 @@ public class MovieDetailActivity extends BaseActivity {
         new AsyncTask<Void, Void, Movie>() {
             @Override
             protected Movie doInBackground(Void... params) {
-                PublicApi api = new PublicApi(publicRequestInterceptor, authenticationService, moviesService);
+                PublicApi api = new PublicApi(authenticationService, moviesService);
                 return api.getMovieDetail(movieId);
             }
 

@@ -189,7 +189,7 @@ public class MoviesListActivity extends BaseActivity {
         new AsyncTask<Void, Void, MovieResultsPage>() {
             @Override
             protected MovieResultsPage doInBackground(Void... params) {
-                PublicApi api = new PublicApi(publicRequestInterceptor, authenticationService, moviesService);
+                PublicApi api = new PublicApi(authenticationService, moviesService);
                 return api.getUpcomingMovies();
             }
 

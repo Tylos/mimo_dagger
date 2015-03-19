@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity {
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
-                PublicApi api = new PublicApi(publicRequestInterceptor, authenticationService, moviesService);
+                PublicApi api = new PublicApi(authenticationService, moviesService);
 
                 SessionData session = api.login(username.getText().toString(), password.getText().toString());
                 if (isSessionValid(session)) {

@@ -11,7 +11,6 @@ import com.uwetrottmann.tmdb.entities.MovieResultsPage;
 import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
 import com.uwetrottmann.tmdb.services.MoviesService;
 
-import retrofit.RequestInterceptor;
 import retrofit.RetrofitError;
 
 /**
@@ -19,12 +18,10 @@ import retrofit.RetrofitError;
  */
 public class PublicApi {
 
-    private final RequestInterceptor publicRequestInterceptor;
     private final AuthenticationService authenticationService;
     private final MoviesService moviesService;
 
-    public PublicApi(RequestInterceptor publicRequestInterceptor, AuthenticationService authenticationService, MoviesService moviesService) {
-        this.publicRequestInterceptor = publicRequestInterceptor;
+    public PublicApi(AuthenticationService authenticationService, MoviesService moviesService) {
         this.authenticationService = authenticationService;
         this.moviesService = moviesService;
     }
