@@ -13,14 +13,12 @@ import com.example.tylos.daggermimo.R;
 import com.example.tylos.daggermimo.base.utils.ImageBuilder;
 import com.example.tylos.daggermimo.base.view.BaseActivity;
 import com.example.tylos.daggermimo.login.api.PublicApi;
+import com.example.tylos.daggermimo.movie.api.AuthenticatedApi;
 import com.example.tylos.daggermimo.movie.api.model.AccountMovie;
 import com.example.tylos.daggermimo.movie.api.services.AccountMovieService;
 import com.squareup.picasso.Picasso;
 import com.uwetrottmann.tmdb.TmdbHelper;
-import com.uwetrottmann.tmdb.entities.AppendToResponse;
 import com.uwetrottmann.tmdb.entities.Movie;
-import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
-import com.uwetrottmann.tmdb.services.MoviesService;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -176,25 +174,11 @@ public class MovieDetailActivity extends BaseActivity {
             @Override
             protected Response doInBackground(Void... params) {
                 SharedPreferences preferences = MovieDetailActivity.this.getApplication().getSharedPreferences("mimodagger", MODE_PRIVATE);
-                final String session_token = preferences.getString("preferences.session_token", "");
+                final String sessionToken = preferences.getString("preferences.session_token", "");
                 final int accountId = (int) preferences.getLong("preferences.account_id", 0);
 
-                AccountMovieService service = new RestAdapter.Builder()
-                        .setEndpoint(BuildConfig.TMDB_ROOT)
-                        .setRequestInterceptor(new RequestInterceptor() {
-                            @Override
-                            public void intercept(RequestFacade request) {
-                                request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                                request.addQueryParam("session_id", session_token);
-                                request.addQueryParam("media_type", "movie");
-                            }
-                        })
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
-                        .build()
-                        .create(AccountMovieService.class);
-
-                return service.postWatchlistMovie(accountId, movieId, shouldAddToWatchlist);
+                AuthenticatedApi api = new AuthenticatedApi();
+                return api.postWatchlistMovie(sessionToken, accountId, movieId, shouldAddToWatchlist);
             }
 
             @Override
@@ -213,25 +197,11 @@ public class MovieDetailActivity extends BaseActivity {
             @Override
             protected Response doInBackground(Void... params) {
                 SharedPreferences preferences = MovieDetailActivity.this.getApplication().getSharedPreferences("mimodagger", MODE_PRIVATE);
-                final String session_token = preferences.getString("preferences.session_token", "");
+                final String sessionToken = preferences.getString("preferences.session_token", "");
                 final int accountId = (int) preferences.getLong("preferences.account_id", 0);
 
-                AccountMovieService service = new RestAdapter.Builder()
-                        .setEndpoint(BuildConfig.TMDB_ROOT)
-                        .setRequestInterceptor(new RequestInterceptor() {
-                            @Override
-                            public void intercept(RequestFacade request) {
-                                request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                                request.addQueryParam("session_id", session_token);
-                                request.addQueryParam("media_type", "movie");
-                            }
-                        })
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
-                        .build()
-                        .create(AccountMovieService.class);
-
-                return service.postFavoriteMovie(accountId, movieId, shouldFavorite);
+                AuthenticatedApi api = new AuthenticatedApi();
+                return api.postFavoriteMovie(sessionToken, accountId, movieId, shouldFavorite);
             }
 
             @Override
