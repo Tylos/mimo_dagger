@@ -1,6 +1,5 @@
 package com.example.tylos.daggermimo.movie.api.services;
 
-import com.example.tylos.daggermimo.login.api.model.Account;
 import com.example.tylos.daggermimo.movie.api.model.AccountMovie;
 
 import retrofit.client.Response;
@@ -13,9 +12,6 @@ import retrofit.http.Query;
  * Created by tylos on 18/3/15.
  */
 public interface AccountMovieService {
-
-    @GET("/account")
-    Account getAccountDetails();
 
     @GET("/movie/{id}/account_states")
     AccountMovie getAccountMovieData(

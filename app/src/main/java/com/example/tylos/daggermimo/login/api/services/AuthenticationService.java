@@ -1,5 +1,6 @@
 package com.example.tylos.daggermimo.login.api.services;
 
+import com.example.tylos.daggermimo.login.api.model.Account;
 import com.example.tylos.daggermimo.login.api.model.RequestToken;
 import com.example.tylos.daggermimo.login.api.model.SessionToken;
 
@@ -12,6 +13,11 @@ import retrofit.http.Query;
  * Created by tylos on 16/3/15.
  */
 public interface AuthenticationService {
+
+    @GET("/account")
+    Account getAccountDetails(
+            @Query("session_id")String requestToken
+    );
 
     @GET("/authentication/token/new")
     RequestToken generateNewRequestToken();
