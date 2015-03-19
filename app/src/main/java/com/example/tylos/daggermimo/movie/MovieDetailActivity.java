@@ -210,8 +210,8 @@ public class MovieDetailActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(Response response) {
-                if(response.getStatus() == 200) {
-                    btWatchlist.setSelected(shouldAddToWatchlist);
+                if(response.getStatus() == 201) {
+                    btWatchlist.setActivated(shouldAddToWatchlist);
                 } else {
                     Toast.makeText(MovieDetailActivity.this, getString(R.string.movie_detail_watchlist_error), Toast.LENGTH_SHORT).show();
                 }
@@ -247,8 +247,8 @@ public class MovieDetailActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(Response response) {
-                if(response.getStatus() == 200) {
-                    btFavorite.setSelected(shouldFavorite);
+                if(response.getStatus() == 201) {
+                    btFavorite.setActivated(shouldFavorite);
                 } else {
                     Toast.makeText(MovieDetailActivity.this, getString(R.string.movie_detail_favorite_error), Toast.LENGTH_SHORT).show();
                 }

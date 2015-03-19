@@ -26,7 +26,7 @@ public interface AccountMovieService {
     Response postFavoriteMovie(
             @Path("id")int accountId,
             @Query("media_id") int mediaId,
-            @Query("watchlist")boolean addToFavorite
+            @Query("favorite")boolean addToFavorite
     );
 
     @POST("/account/{id}/watchlist")
