@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.example.tylos.daggerexample"
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+    def STRING = "String"
+
+        release {
+            buildConfigField STRING, "TMDB_API_KEY", "\"1cf95db36d8c7ed008aa9df08c5e3d29\""
+            buildConfigField STRING, "TMDB_ROOT", "\"https://api.themoviedb.org/3\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField STRING, "TMDB_API_KEY", "\"1cf95db36d8c7ed008aa9df08c5e3d29\""
+            buildConfigField STRING, "TMDB_ROOT", "\"https://api.themoviedb.org/3\""
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.uwetrottmann:tmdb-java:0.8.0'
+    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.android.support:support-v4:21.0.3'
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="120dip">
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_placeholder"/>
+
+    <TextView
+        android:id="@+id/score"
+        android:textColor="@color/white_80"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="48dip"
+        android:includeFontPadding="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginLeft="16dip"
+        tools:text="4.8"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:textColor="@color/white_80"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dip"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textAllCaps="true"
+        android:layout_marginLeft="16dip"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/score"
+        android:layout_alignBaseline="@id/score"
+        tools:text="Crash"/>
+
+</RelativeLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_90">#F2000000</color>
+    <color name="black_80">#CC000000</color>
+    <color name="placeholder">#FF94909E</color>
+    <color name="black_50">#80000000</color>
+    <color name="white_80">#CCFFFFFF</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="active">#FF67B8C1</color>
+</resources>
