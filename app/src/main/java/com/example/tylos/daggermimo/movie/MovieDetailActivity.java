@@ -177,8 +177,8 @@ public class MovieDetailActivity extends BaseActivity {
                 final String sessionToken = preferences.getString("preferences.session_token", "");
                 final int accountId = (int) preferences.getLong("preferences.account_id", 0);
 
-                AuthenticatedApi api = new AuthenticatedApi();
-                return api.postWatchlistMovie(sessionToken, accountId, movieId, shouldAddToWatchlist);
+                AuthenticatedApi api = new AuthenticatedApi(sessionToken, accountId);
+                return api.postWatchlistMovie(movieId, shouldAddToWatchlist);
             }
 
             @Override
@@ -200,8 +200,8 @@ public class MovieDetailActivity extends BaseActivity {
                 final String sessionToken = preferences.getString("preferences.session_token", "");
                 final int accountId = (int) preferences.getLong("preferences.account_id", 0);
 
-                AuthenticatedApi api = new AuthenticatedApi();
-                return api.postFavoriteMovie(sessionToken, accountId, movieId, shouldFavorite);
+                AuthenticatedApi api = new AuthenticatedApi(sessionToken, accountId);
+                return api.postFavoriteMovie(movieId, shouldFavorite);
             }
 
             @Override
