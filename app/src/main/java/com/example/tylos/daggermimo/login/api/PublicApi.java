@@ -1,12 +1,10 @@
 package com.example.tylos.daggermimo.login.api;
 
-import com.example.tylos.daggermimo.BuildConfig;
 import com.example.tylos.daggermimo.login.api.model.Account;
 import com.example.tylos.daggermimo.login.api.model.RequestToken;
 import com.example.tylos.daggermimo.login.api.model.SessionData;
 import com.example.tylos.daggermimo.login.api.model.SessionToken;
 import com.example.tylos.daggermimo.login.api.services.AuthenticationService;
-import com.uwetrottmann.tmdb.TmdbHelper;
 import com.uwetrottmann.tmdb.entities.AppendToResponse;
 import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.MovieResultsPage;
@@ -14,36 +12,22 @@ import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
 import com.uwetrottmann.tmdb.services.MoviesService;
 
 import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.converter.GsonConverter;
 
 /**
  * Created by tylos on 19/3/15.
  */
 public class PublicApi {
 
-    private final RequestInterceptor publicRequestInterceptor = new RequestInterceptor() {
-        @Override
-        public void intercept(RequestFacade request) {
-            request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-        }
-    };
+    private final RequestInterceptor publicRequestInterceptor;
+    private final AuthenticationService authenticationService;
+    private final MoviesService moviesService;
 
-    private final AuthenticationService authenticationService = new RestAdapter.Builder()
-            .setEndpoint(BuildConfig.TMDB_ROOT)
-            .setRequestInterceptor(publicRequestInterceptor)
-            .setLogLevel(RestAdapter.LogLevel.FULL)
-            .build()
-            .create(AuthenticationService.class);
-
-    private final MoviesService moviesService = new RestAdapter.Builder()
-            .setEndpoint(BuildConfig.TMDB_ROOT)
-            .setRequestInterceptor(publicRequestInterceptor)
-            .setLogLevel(RestAdapter.LogLevel.FULL)
-            .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
-            .build()
-            .create(MoviesService.class);
+    public PublicApi(RequestInterceptor publicRequestInterceptor, AuthenticationService authenticationService, MoviesService moviesService) {
+        this.publicRequestInterceptor = publicRequestInterceptor;
+        this.authenticationService = authenticationService;
+        this.moviesService = moviesService;
+    }
 
     public SessionData login(String username, String password) {
 
