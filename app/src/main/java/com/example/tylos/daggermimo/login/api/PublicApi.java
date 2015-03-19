@@ -16,6 +16,18 @@ import retrofit.RetrofitError;
  */
 public class PublicApi {
 
+    private final AuthenticationService authenticationService = new RestAdapter.Builder()
+            .setEndpoint(BuildConfig.TMDB_ROOT)
+            .setRequestInterceptor(new RequestInterceptor() {
+                @Override
+                public void intercept(RequestFacade request) {
+                    request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
+                }
+            })
+            .setLogLevel(RestAdapter.LogLevel.FULL)
+            .build()
+            .create(AuthenticationService.class);
+
     public SessionData login(String username, String password) {
 
         SessionToken session = getSessionToken(username, password);
@@ -25,28 +37,16 @@ public class PublicApi {
     }
 
     private SessionToken getSessionToken(String username, String password) {
-        AuthenticationService service = new RestAdapter.Builder()
-                .setEndpoint(BuildConfig.TMDB_ROOT)
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade request) {
-                        request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                    }
-                })
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .build()
-                .create(AuthenticationService.class);
-
         RequestToken token;
         SessionToken session;
         try {
-            token = service.generateNewRequestToken();
-            token = service.validateTokenWithLogin(
+            token = authenticationService.generateNewRequestToken();
+            token = authenticationService.validateTokenWithLogin(
                     token.getRequestToken(),
                     username,
                     password
             );
-            session = service.generateSessionToken(token.getRequestToken());
+            session = authenticationService.generateSessionToken(token.getRequestToken());
         } catch (RetrofitError error) {
             session = null;
         }
@@ -54,22 +54,10 @@ public class PublicApi {
     }
 
     private Account getAccount(SessionToken session) {
-        AuthenticationService service = new RestAdapter.Builder()
-                .setEndpoint(BuildConfig.TMDB_ROOT)
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade request) {
-                        request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                    }
-                })
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .build()
-                .create(AuthenticationService.class);
-
         Account account = null;
         if (session != null) {
             try {
-                account = service.getAccountDetails(session.getRequestToken());
+                account = authenticationService.getAccountDetails(session.getRequestToken());
             }catch (RetrofitError error) {
                 account = null;
             }
