@@ -31,6 +31,19 @@ public class PublicApi {
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .build()
             .create(AuthenticationService.class);
+    
+    private final MoviesService moviesService = new RestAdapter.Builder()
+            .setEndpoint(BuildConfig.TMDB_ROOT)
+            .setRequestInterceptor(new RequestInterceptor() {
+                @Override
+                public void intercept(RequestFacade request) {
+                    request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
+                }
+            })
+            .setLogLevel(RestAdapter.LogLevel.FULL)
+            .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
+            .build()
+            .create(MoviesService.class);
 
     public SessionData login(String username, String password) {
 
@@ -70,21 +83,7 @@ public class PublicApi {
     }
 
     public MovieResultsPage getUpcomingMovies() {
-        MoviesService service = new RestAdapter.Builder()
-                .setEndpoint(BuildConfig.TMDB_ROOT)
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade request) {
-                        request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                    }
-                })
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
-                .build()
-                .create(MoviesService.class);
-
-
-        return service.upcoming(1, "es");
+        return moviesService.upcoming(1, "es");
     }
 
 }
