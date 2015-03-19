@@ -20,26 +20,23 @@ import retrofit.converter.GsonConverter;
  */
 public class PublicApi {
 
+    private final RequestInterceptor publicRequestInterceptor = new RequestInterceptor() {
+        @Override
+        public void intercept(RequestFacade request) {
+            request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
+        }
+    };
+    
     private final AuthenticationService authenticationService = new RestAdapter.Builder()
             .setEndpoint(BuildConfig.TMDB_ROOT)
-            .setRequestInterceptor(new RequestInterceptor() {
-                @Override
-                public void intercept(RequestFacade request) {
-                    request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                }
-            })
+            .setRequestInterceptor(publicRequestInterceptor)
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .build()
             .create(AuthenticationService.class);
-    
+
     private final MoviesService moviesService = new RestAdapter.Builder()
             .setEndpoint(BuildConfig.TMDB_ROOT)
-            .setRequestInterceptor(new RequestInterceptor() {
-                @Override
-                public void intercept(RequestFacade request) {
-                    request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                }
-            })
+            .setRequestInterceptor(publicRequestInterceptor)
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
             .build()
