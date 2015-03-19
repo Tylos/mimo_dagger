@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.example.tylos.daggermimo.R;
 import com.example.tylos.daggermimo.base.view.BaseActivity;
-import com.example.tylos.daggermimo.login.api.LoginApi;
+import com.example.tylos.daggermimo.login.api.PublicApi;
 import com.example.tylos.daggermimo.login.api.model.SessionData;
 import com.example.tylos.daggermimo.upcomming.view.MoviesListActivity;
 
@@ -45,7 +45,7 @@ public class LoginActivity extends BaseActivity {
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
-                LoginApi api = new LoginApi();
+                PublicApi api = new PublicApi();
 
                 SessionData session = api.login(username.getText().toString(), password.getText().toString());
                 if (isSessionValid(session)) {

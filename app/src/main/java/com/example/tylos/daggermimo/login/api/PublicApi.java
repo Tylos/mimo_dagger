@@ -6,7 +6,6 @@ import com.example.tylos.daggermimo.login.api.model.RequestToken;
 import com.example.tylos.daggermimo.login.api.model.SessionData;
 import com.example.tylos.daggermimo.login.api.model.SessionToken;
 import com.example.tylos.daggermimo.login.api.services.AuthenticationService;
-import com.example.tylos.daggermimo.movie.api.services.AccountMovieService;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -15,10 +14,17 @@ import retrofit.RetrofitError;
 /**
  * Created by tylos on 19/3/15.
  */
-public class LoginApi {
+public class PublicApi {
 
     public SessionData login(String username, String password) {
 
+        SessionToken session = getSessionToken(username, password);
+        Account account = getAccount(session);
+
+        return new SessionData(session, account);
+    }
+
+    private SessionToken getSessionToken(String username, String password) {
         AuthenticationService service = new RestAdapter.Builder()
                 .setEndpoint(BuildConfig.TMDB_ROOT)
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -30,7 +36,6 @@ public class LoginApi {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build()
                 .create(AuthenticationService.class);
-
 
         RequestToken token;
         SessionToken session;
@@ -45,30 +50,31 @@ public class LoginApi {
         } catch (RetrofitError error) {
             session = null;
         }
+        return session;
+    }
+
+    private Account getAccount(SessionToken session) {
+        AuthenticationService service = new RestAdapter.Builder()
+                .setEndpoint(BuildConfig.TMDB_ROOT)
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade request) {
+                        request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
+                    }
+                })
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .build()
+                .create(AuthenticationService.class);
 
         Account account = null;
-        final SessionToken finalSession = session;
         if (session != null) {
             try {
-                AccountMovieService accountService = new RestAdapter.Builder()
-                        .setEndpoint(BuildConfig.TMDB_ROOT)
-                        .setRequestInterceptor(new RequestInterceptor() {
-                            @Override
-                            public void intercept(RequestFacade request) {
-                                request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                                request.addQueryParam("session_id", finalSession.getRequestToken());
-                            }
-                        })
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .build()
-                        .create(AccountMovieService.class);
-                account = accountService.getAccountDetails();
+                account = service.getAccountDetails(session.getRequestToken());
             }catch (RetrofitError error) {
                 account = null;
             }
         }
-
-        return new SessionData(session, account);
+        return account;
     }
 
 }
