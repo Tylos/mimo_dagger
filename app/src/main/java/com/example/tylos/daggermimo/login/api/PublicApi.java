@@ -7,7 +7,10 @@ import com.example.tylos.daggermimo.login.api.model.SessionData;
 import com.example.tylos.daggermimo.login.api.model.SessionToken;
 import com.example.tylos.daggermimo.login.api.services.AuthenticationService;
 import com.uwetrottmann.tmdb.TmdbHelper;
+import com.uwetrottmann.tmdb.entities.AppendToResponse;
+import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.MovieResultsPage;
+import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
 import com.uwetrottmann.tmdb.services.MoviesService;
 
 import retrofit.RequestInterceptor;
@@ -26,7 +29,7 @@ public class PublicApi {
             request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
         }
     };
-    
+
     private final AuthenticationService authenticationService = new RestAdapter.Builder()
             .setEndpoint(BuildConfig.TMDB_ROOT)
             .setRequestInterceptor(publicRequestInterceptor)
@@ -81,6 +84,10 @@ public class PublicApi {
 
     public MovieResultsPage getUpcomingMovies() {
         return moviesService.upcoming(1, "es");
+    }
+
+    public Movie getMovieDetail(int movieId) {
+        return moviesService.summary(movieId, "es", new AppendToResponse(AppendToResponseItem.CREDITS));
     }
 
 }

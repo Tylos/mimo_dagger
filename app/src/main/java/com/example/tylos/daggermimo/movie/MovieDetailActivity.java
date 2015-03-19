@@ -12,6 +12,7 @@ import com.example.tylos.daggermimo.BuildConfig;
 import com.example.tylos.daggermimo.R;
 import com.example.tylos.daggermimo.base.utils.ImageBuilder;
 import com.example.tylos.daggermimo.base.view.BaseActivity;
+import com.example.tylos.daggermimo.login.api.PublicApi;
 import com.example.tylos.daggermimo.movie.api.model.AccountMovie;
 import com.example.tylos.daggermimo.movie.api.services.AccountMovieService;
 import com.squareup.picasso.Picasso;
@@ -103,20 +104,8 @@ public class MovieDetailActivity extends BaseActivity {
         new AsyncTask<Void, Void, Movie>() {
             @Override
             protected Movie doInBackground(Void... params) {
-                MoviesService service = new RestAdapter.Builder()
-                        .setEndpoint(BuildConfig.TMDB_ROOT)
-                        .setRequestInterceptor(new RequestInterceptor() {
-                            @Override
-                            public void intercept(RequestFacade request) {
-                                request.addQueryParam("api_key", BuildConfig.TMDB_API_KEY);
-                            }
-                        })
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setConverter(new GsonConverter(TmdbHelper.getGsonBuilder().create()))
-                        .build()
-                        .create(MoviesService.class);
-
-                return service.summary(movieId, "es", new AppendToResponse(AppendToResponseItem.CREDITS));
+                PublicApi api = new PublicApi();
+                return api.getMovieDetail(movieId);
             }
 
             @Override
